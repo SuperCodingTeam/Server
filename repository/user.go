@@ -1,18 +1,18 @@
-package services
+package repository
 
 import (
 	"fmt"
 	"log"
 	"time"
 
-	models "github.com/SuperCodingTeam/models"
+	"github.com/SuperCodingTeam/model"
 )
 
-func CreateUser(id string, name string, email string, password string, birthday *time.Time) {
-	user := models.User{
+func CreateUser(id string, password string, name string, email string, birthday *time.Time) {
+	user := model.User{
 		ID:       id,
-		Name:     name,
 		Password: password,
+		Name:     name,
 		Email:    email,
 		Birthday: birthday,
 	}
@@ -24,27 +24,29 @@ func CreateUser(id string, name string, email string, password string, birthday 
 	}
 }
 
-func ReadUser() {
-	var users []models.User
+func ReadUser() []model.User {
+	var users []model.User
 	result := db.Find(&users)
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error: %s", result.Error))
-	} else {
-		println(users)
 	}
+
+	return users
 }
 
-func ReadUserByUUID(userUUID string) {
-	var user models.User
+func ReadUserByUUID(userUUID string) model.User {
+	var user model.User
 	result := db.Where("user_uuid = ?", userUUID).First(&user)
 
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error: %s", result.Error))
 	}
+
+	return user
 }
 
-func ReadUserByID(userID string) models.User {
-	var user models.User
+func ReadUserByID(userID string) model.User {
+	var user model.User
 	result := db.Where("id = ?", userID).First(&user)
 
 	if result.Error != nil {
@@ -54,8 +56,8 @@ func ReadUserByID(userID string) models.User {
 	return user
 }
 
-func UpdateUserByUUID(userUUID string, user models.User) {
-	var updateUser models.User
+func UpdateUserByUUID(userUUID string, user model.User) {
+	var updateUser model.User
 	result := db.Where("user_uuid = ?", userUUID).First(&updateUser)
 
 	if result.Error != nil {
@@ -69,7 +71,7 @@ func UpdateUserByUUID(userUUID string, user models.User) {
 }
 
 func DeleteUserByUUID(userUUID string) {
-	var user models.User
+	var user model.User
 	result := db.Delete(user)
 
 	if result.Error != nil {

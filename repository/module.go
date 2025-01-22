@@ -1,4 +1,4 @@
-package services
+package repository
 
 import (
 	"github.com/SuperCodingTeam/database"

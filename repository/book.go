@@ -1,16 +1,16 @@
-package services
+package repository
 
 import (
 	"fmt"
 	"log"
 
-	models "github.com/SuperCodingTeam/models"
+	"github.com/SuperCodingTeam/model"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 func CreateBook(bookName string, author string, imagePath string) *gorm.DB {
-	book := models.Book{BookName: bookName, Author: author, ImagePath: imagePath}
+	book := model.Book{BookName: bookName, Author: author, ImagePath: imagePath}
 
 	result := db.Create(&book)
 
@@ -22,7 +22,7 @@ func CreateBook(bookName string, author string, imagePath string) *gorm.DB {
 }
 
 func ReadBook() {
-	var books []models.Book
+	var books []model.Book
 	result := db.Find(&books)
 
 	if result.Error != nil {
@@ -30,8 +30,8 @@ func ReadBook() {
 	}
 }
 
-func UpdateBookByUUID(bookUUID uuid.UUID, book models.Book) {
-	var updateBook models.Book
+func UpdateBookByUUID(bookUUID uuid.UUID, book model.Book) {
+	var updateBook model.Book
 	result := db.Where("book_uuid = ?", bookUUID).First(&updateBook)
 
 	if result.Error != nil {
@@ -46,7 +46,7 @@ func UpdateBookByUUID(bookUUID uuid.UUID, book models.Book) {
 }
 
 func DeleteBookByUUID(bookUUID uuid.UUID) {
-	var book models.Book
+	var book model.Book
 	result := db.Delete(&book)
 
 	if result.Error != nil {
