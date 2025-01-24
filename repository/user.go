@@ -8,6 +8,16 @@ import (
 	"github.com/SuperCodingTeam/model"
 )
 
+func checkValidFilter(filter string) bool {
+	for _, data := range [3]string{"user_uuid", "id", "email"} {
+		if data == filter {
+			return true
+		}
+	}
+
+	return false
+}
+
 func CreateUser(id string, password string, name string, email string, birthday *time.Time) {
 	user := model.User{
 		ID:       id,
@@ -24,35 +34,18 @@ func CreateUser(id string, password string, name string, email string, birthday 
 	}
 }
 
-func ReadUser() []model.User {
-	var users []model.User
-	result := db.Find(&users)
-	if result.Error != nil {
-		log.Println(fmt.Sprintf("Error: %s", result.Error))
-	}
-
-	return users
-}
-
-func ReadUserByUUID(userUUID string) model.User {
+func ReadUser(data string, filter string) model.User {
 	var user model.User
-	result := db.Where("user_uuid = ?", userUUID).First(&user)
+	var query string
 
+	if !checkValidFilter(filter) {
+		return model.User{}
+	}
+
+	result := db.Where(fmt.Sprintf("%s = ?", query), data).First(&user)
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error: %s", result.Error))
 	}
-
-	return user
-}
-
-func ReadUserByID(userID string) model.User {
-	var user model.User
-	result := db.Where("id = ?", userID).First(&user)
-
-	if result.Error != nil {
-		log.Println(fmt.Sprintf("Error: %s", result.Error))
-	}
-
 	return user
 }
 
@@ -66,6 +59,7 @@ func UpdateUserByUUID(userUUID string, user model.User) {
 		updateUser.Name = user.Name
 		updateUser.Email = user.Email
 		updateUser.Birthday = user.Birthday
+		updateUser.Password = user.Password
 	}
 	db.Save(&user)
 }
