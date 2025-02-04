@@ -1,13 +1,30 @@
 package utility
 
-import (
-	"github.com/SuperCodingTeam/model"
-)
+import "github.com/SuperCodingTeam/model"
 
-type Response struct {
-	Message    string                 `json:"message"`
-	StatusCode uint                   `json:"code"`
-	Token      string                 `json:"token"`
-	User       model.User             `json:"user"`
-	Error      *model.BookPocketError `json:"error"`
+type OKResponse struct {
+	Code    int    `json:"code"`
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
+type FailResponse struct {
+	Code    int    `json:"code"`
+	Status  string `json:"status"`
+	Message string `json:"message"`
+	Error   string `json:"error"`
+}
+
+type LoginResponse struct {
+	Code    int    `json:"code"`
+	Status  string `json:"status"`
+	Message string `json:"message"`
+	Token   string `json:"token"`
+}
+
+type ProfileResponse struct {
+	Code    int        `json:"code"`
+	Status  string     `json:"status"`
+	Message string     `json:"message"`
+	User    model.User `json:"user"`
 }
